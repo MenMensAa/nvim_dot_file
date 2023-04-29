@@ -13,7 +13,7 @@ local mode_color_config = {
   R =  "orange",
   r =  "orange",
   ["!"] =  "red",
-  t =  "red", 
+  t =  "red",
 }
 
 local function get_mode_color(mode)

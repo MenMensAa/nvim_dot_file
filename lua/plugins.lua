@@ -1,6 +1,6 @@
 local packer = require("packer")
 
-local function getConfig(configPath)
+local function get_config(configPath)
   return "require('config." .. configPath .. "')"
 end
 
@@ -10,7 +10,7 @@ packer.startup({
 
     use {
       "navarasu/onedark.nvim",
-      config = getConfig("colorscheme")
+      config = get_config("colorscheme")
     }
 
     use {
@@ -18,7 +18,7 @@ packer.startup({
       requires = {
         "nvim-tree/nvim-web-devicons", -- optional
       },
-      config = getConfig("nvim-tree")
+      config = get_config("nvim-tree")
     }
 
     -- use {
@@ -29,7 +29,7 @@ packer.startup({
     use {
       "rebelot/heirline.nvim",
       event = "UiEnter",
-      config = getConfig("heirline")
+      config = get_config("heirline")
     }
   end,
   config = {

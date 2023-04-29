@@ -11,10 +11,20 @@ nvim_tree.setup({
     side = "left",
   },
   renderer = {
+    root_folder_label = false,
+    highlight_git = true,
     indent_width = 2,
     indent_markers = {
       enable = true
-    }
+    },
+    icons = {
+      show = {
+        git = false
+      }
+    },
+  },
+  filters = {
+    custom = { "^.git" }
   }
 })
 
