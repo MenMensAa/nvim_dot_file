@@ -41,6 +41,11 @@ packer.startup({
       dependencies = "nvim-treesitter/nvim-treesitter",
       config = get_config("ts-autotag")
     }
+
+    use {
+      "windwp/nvim-autopairs",
+      config = get_config("autopairs")
+    }
   end,
   config = {
     max_jobs = 16,
