@@ -1,4 +1,3 @@
-local conditions = require("heirline.conditions")
 local statusline = require("config.heirline.statusline")
 local tabline = require("config.heirline.tabline")
 local palette = require("palette")
