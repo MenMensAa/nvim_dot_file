@@ -35,7 +35,6 @@ wk.setup {
       windows = false,
       nav = false,
       g = false,
-      z = false
     },
   },
   window = {

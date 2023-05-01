@@ -27,7 +27,11 @@ local default_options = {
   showtabline = 2, -- 一直展示tabline
   laststatus = 3,  -- 2为每个窗口都展示一个statusline，3为仅在底部展示全局的statusline
   timeout = true,   -- plugin which key
-  timeoutlen = 600  -- plugin which key
+  timeoutlen = 600,  -- plugin which key
+  
+  -- treesitter folding
+  foldmethod = "expr",
+  foldexpr = "nvim_treesitter#foldexpr()",
 }
 
 vim.opt.spelllang:append "cjk" -- disable spellchecking for asian characters (VIM algorithm does not support it)
