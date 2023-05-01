@@ -1,5 +1,6 @@
-local utils = require("heirline.utils")
+local heirline_utils = require("heirline.utils")
 local nvimWebDevicons = require("nvim-web-devicons")
+local tools = require("tools")
 
 local active_text_color = "fg"
 local deactive_text_color = "bg5"
@@ -56,27 +57,6 @@ local BufferlineContent = {
   BufferlineFileName
 }
 
--- this is the default function used to retrieve buffers
-local get_bufs = function()
-  return vim.tbl_filter(function(bufnr)
-    return vim.api.nvim_buf_get_option(bufnr, "buflisted")
-  end, vim.api.nvim_list_bufs())
-end
-
-local get_buf_neighbour = function(bufnr)
-  local buf, prev_buf, next_buf = nil, nil, nil
-  for i, v in ipairs(get_bufs()) do
-    if v == bufnr then
-      prev_buf = buf
-    end
-    if buf == bufnr then
-      next_buf = v
-    end
-    buf = v
-  end
-  return prev_buf, next_buf
-end
-
 local BufferlineButton = {
   init = function(self)
     self.is_modified = vim.api.nvim_buf_get_option(self.bufnr, "modified")
@@ -99,23 +79,7 @@ local BufferlineButton = {
   end,
   on_click = {
     callback = function(self, minwid)
-      local is_modified = vim.api.nvim_buf_get_option(minwid, "modified")
-      if not is_modified then
-        vim.schedule(function()
-          local active_bufnr = vim.api.nvim_get_current_buf()
-          if active_bufnr == minwid then
-            local prev_buf, next_buf = get_buf_neighbour(minwid)
-            local target_buf = prev_buf or next_buf
-            if target_buf ~= nil then
-              vim.api.nvim_win_set_buf(0, target_buf)
-            else
-              vim.api.nvim_command("close")
-            end
-          end
-          vim.api.nvim_buf_delete(minwid, { force = false })
-          vim.cmd.redrawtabline()
-        end)
-      end
+      tools.close_buffer(minwid)
     end,
     minwid = function(self)
       return self.bufnr
@@ -147,7 +111,7 @@ local BufferlineComponent = {
   { provider = "  " }
 }
 
-local Bufferline = utils.make_buflist(
+local Bufferline = heirline_utils.make_buflist(
 BufferlineComponent
 )
 

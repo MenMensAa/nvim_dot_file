@@ -3,8 +3,6 @@ local default_options = {
   completeopt = { "menuone", "noselect" },
   encoding = "utf-8",
   fileencoding = "utf-8", -- the encoding written to a file
-  -- hidden = true, -- required to keep multiple buffers and open multiple buffers
-  -- hlsearch = true, -- highlight all matches on previous search pattern
   ignorecase = true, -- ignore case in search patterns
   mouse = "a", -- allow the mouse to be used in neovim
   pumheight = 10, -- pop up menu height
@@ -13,7 +11,6 @@ local default_options = {
   splitbelow = true, -- force all horizontal splits to go below current window
   splitright = true, -- force all vertical splits to go to the right of current window
   termguicolors = true, -- set term gui colors (most terminals support this)
-  -- timeoutlen = 1000, -- time to wait for a mapped sequence to complete (in milliseconds)
   updatetime = 100, -- faster completion
   swapfile = false, -- creates a swapfile
   writebackup = false, -- if a file is being edited by another program (or was written to file while editing with another program), it is not allowed to be edited
@@ -29,6 +26,8 @@ local default_options = {
   sidescrolloff = 8, -- minimal number of screen lines to keep left and right of the cursor.
   showtabline = 2, -- 一直展示tabline
   laststatus = 3,  -- 2为每个窗口都展示一个statusline，3为仅在底部展示全局的statusline
+  timeout = true,   -- plugin which key
+  timeoutlen = 600  -- plugin which key
 }
 
 vim.opt.spelllang:append "cjk" -- disable spellchecking for asian characters (VIM algorithm does not support it)

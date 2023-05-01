@@ -46,6 +46,11 @@ packer.startup({
       "windwp/nvim-autopairs",
       config = get_config("autopairs")
     }
+
+    use {
+      "folke/which-key.nvim",
+      config = get_config("which-key")
+    }
   end,
   config = {
     max_jobs = 16,
