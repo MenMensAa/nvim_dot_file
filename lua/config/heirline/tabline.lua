@@ -6,7 +6,7 @@ local active_text_color = "fg"
 local deactive_text_color = "bg5"
 
 local active_bg = "bg3"
-local deactive_bg = "bg_l"
+local deactive_bg = "bg1"
 
 local BufferlineFileName = {
   provider = function(self)

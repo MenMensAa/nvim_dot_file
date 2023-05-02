@@ -98,7 +98,7 @@ local defaults = {
 -- @param mode The keymap mode, can be one of the keys of mode_adapters
 -- @param key The key of keymap
 -- @param val Can be form as a mapping or tuple of mapping and user defined opt
-function set_keymaps(mode, key, val)
+local function set_keymaps(mode, key, val)
   local opt = generic_opts[mode] or generic_opts_any
   if type(val) == "table" then
     opt = val[2]
@@ -112,7 +112,7 @@ end
 -- Load key mappings for a given mode
 -- @param mode The keymap mode, can be one of the keys of mode_adapters
 -- @param keymaps The list of key mappings
-function load_mode(mode, keymaps)
+local function load_mode(mode, keymaps)
   mode = mode_adapters[mode] or mode
   for k, v in pairs(keymaps) do
     set_keymaps(mode, k, v)
@@ -121,7 +121,7 @@ end
 
 -- Load key mappings for all provided modes
 -- @param keymaps A list of key mappings for each mode
-function load(keymaps)
+local function load(keymaps)
   keymaps = keymaps or {}
   for mode, mapping in pairs(keymaps) do
     load_mode(mode, mapping)

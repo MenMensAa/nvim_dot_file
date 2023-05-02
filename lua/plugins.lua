@@ -1,63 +1,76 @@
-local packer = require("packer")
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
-local function get_config(configPath)
-  return "require('config." .. configPath .. "')"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
 end
 
-packer.startup({
-  function(use)
-    use "wbthomason/packer.nvim"
+vim.opt.rtp:prepend(lazypath)
 
-    use {
-      "navarasu/onedark.nvim",
-      config = get_config("colorscheme")
-    }
+local function get_config(conf_path)
+  return function()
+    local full_path = "config." .. conf_path
+    require(full_path)
+  end
+end
 
-    use {
-      "nvim-tree/nvim-tree.lua",
-      requires = {
-        "nvim-tree/nvim-web-devicons", -- optional
-      },
-      config = get_config("nvim-tree")
-    }
+local plugins_config = {
+  {
+    "navarasu/onedark.nvim",
+    lazy = false,
+    config = get_config("colorscheme")
+  },
 
-    use {
-      "rebelot/heirline.nvim",
-      event = "UiEnter",
-      config = get_config("heirline")
-    }
+  {
+    "nvim-tree/nvim-web-devicons",
+    lazy = true
+  },
 
-    use {
-      "nvim-treesitter/nvim-treesitter",
-      run = function()
-        local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
-        ts_update()
-      end,
-      config = get_config("treesitter")
-    }
+  {
+    "nvim-tree/nvim-tree.lua",
+    lazy = false,
+    config = get_config("nvim-tree")
+  },
 
-    use {
-      "windwp/nvim-ts-autotag",
-      dependencies = "nvim-treesitter/nvim-treesitter",
-      config = get_config("ts-autotag")
-    }
+  {
+    "rebelot/heirline.nvim",
+    event = "UiEnter",
+    config = get_config("heirline")
+  },
 
-    use {
-      "windwp/nvim-autopairs",
-      config = get_config("autopairs")
-    }
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    event = { "BufReadPost", "BufNewFile" },
+    config = get_config("treesitter")
+  },
 
-    use {
-      "folke/which-key.nvim",
-      config = get_config("which-key")
-    }
-  end,
-  config = {
-    max_jobs = 16,
-    display = {
-      open_fn = function()
-        return require("packer.util").float({ border = "single" })
-      end
-    }
+  {
+    "windwp/nvim-ts-autotag",
+    event = "InsertEnter",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = get_config("ts-autotag")
+  },
+
+  {
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = get_config("autopairs")
+  },
+
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    config = get_config("which-key")
   }
-})
+}
+
+require("lazy").setup(plugins_config)
+

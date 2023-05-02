@@ -10,11 +10,6 @@ local mapping = {
     name = "Save or Screen",
     a = { c("wa"), "Save All Buffer" }
   },
-  p = {
-    name = "Packer Command",
-    s = { c("PackerSync"), "PackerSync" },
-    c = { c("PackerCompile"), "PackerCompile" }
-  },
   e = { c("NvimTreeToggle"), "Toggle NvimTree" },
   c = { 
     function()

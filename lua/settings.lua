@@ -42,3 +42,4 @@ vim.opt.whichwrap:append "<,>,[,],h,l"
 for k, v in pairs(default_options) do
   vim.opt[k] = v
 end
+

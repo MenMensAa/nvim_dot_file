@@ -1,0 +1,11 @@
+{
+  "heirline.nvim": { "branch": "master", "commit": "2aed06a3a04c877dc64834e9b9dabf6ad3491bc8" },
+  "lazy.nvim": { "branch": "main", "commit": "bb5cc9ef3bbb17541929b745f74551c900188099" },
+  "nvim-autopairs": { "branch": "master", "commit": "7747bbae60074acf0b9e3a4c13950be7a2dff444" },
+  "nvim-tree.lua": { "branch": "master", "commit": "0df384b6c0fa62ff1333634d56ee4df0be5d34e1" },
+  "nvim-treesitter": { "branch": "master", "commit": "dd1cd5462253f967246b738c611b45c5f241b79c" },
+  "nvim-ts-autotag": { "branch": "main", "commit": "40615e96075c743ef47aaf9de966dc348bec6459" },
+  "nvim-web-devicons": { "branch": "master", "commit": "b34362b20a4942b3245f958e73ebe1b09b020ad1" },
+  "onedark.nvim": { "branch": "master", "commit": "82cad746101300aa2fdea5f4d121c51c23bab8bd" },
+  "which-key.nvim": { "branch": "main", "commit": "4acffc92953a90a790603bfdab7c92319ab167b1" }
+}
