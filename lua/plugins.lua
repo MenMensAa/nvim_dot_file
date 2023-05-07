@@ -1,18 +1,3 @@
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
-    lazypath,
-  })
-end
-
-vim.opt.rtp:prepend(lazypath)
-
 local function get_config(conf_path)
   return function()
     local full_path = "config." .. conf_path
@@ -40,10 +25,17 @@ local plugins_config = {
 
   {
     "rebelot/heirline.nvim",
-    event = "UiEnter",
+    event = "BufEnter",
     config = get_config("heirline")
   },
 
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    config = get_config("which-key")
+  },
+
+  -- tree-sitter plugins
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
@@ -65,12 +57,38 @@ local plugins_config = {
     config = get_config("autopairs")
   },
 
+  -- lsp plugins
   {
-    "folke/which-key.nvim",
-    event = "VeryLazy",
-    config = get_config("which-key")
-  }
+    "williamboman/mason.nvim",
+    build = ":MasonUpdate",
+    config = get_config("mason")
+  },
+  {
+    "williamboman/mason-lspconfig.nvim",
+    dependencies = { "mason.nvim" },
+    config = get_config("mason-lsp")
+  },
+  {
+    "neovim/nvim-lspconfig",  -- collection of configuration for built-in lsp client
+    lazy = true,
+    dependencies = { "williamboman/mason-lspconfig.nvim", "williamboman/mason.nvim" }
+  },
 }
+
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+
+vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup(plugins_config)
 

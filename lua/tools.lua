@@ -42,4 +42,20 @@ function tools.close_buffer(bufnr)
   end
 end
 
+local vim_diagnostics_map = {
+  errors = "ERROR",
+  warnings = "WARN",
+  hints = "HINT",
+  info = "INFO"
+}
+
+function tools.get_diagnostics_info()
+  local result = {}
+  for key, severity in pairs(vim_diagnostics_map) do
+    result[key] = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity[severity] })
+  end
+  return result
+end
+
 return tools
+

@@ -30,14 +30,30 @@ local default_options = {
   timeoutlen = 600,  -- plugin which key
   
   -- treesitter folding
-  foldmethod = "expr",
-  foldexpr = "nvim_treesitter#foldexpr()",
+  -- foldmethod = "expr",
+  -- foldexpr = "nvim_treesitter#foldexpr()",
 }
 
 vim.opt.spelllang:append "cjk" -- disable spellchecking for asian characters (VIM algorithm does not support it)
 vim.opt.shortmess:append "c" -- don't show redundant messages from ins-completion-menu
 vim.opt.shortmess:append "I" -- don't show the default intro message
 vim.opt.whichwrap:append "<,>,[,],h,l"
+
+-- 解决wsl下复制粘贴的问题
+if vim.fn.has("wsl") == 1 then
+  vim.g.clipboard = {
+    name = "WslClipboard",
+    copy = {
+      ["+"] = "clip.exe",
+      ["*"] = "clip.exe"
+    },
+    -- paste= {
+    --  ["+"] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+    --  ["*"] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+    -- },
+    cache_enabled= 0,
+  }
+end
 
 for k, v in pairs(default_options) do
   vim.opt[k] = v

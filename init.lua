@@ -1,4 +1,5 @@
 require("settings")
-require("keybindings")
+require("keybindings").bind_keymaps()
 require("palette")
 require("plugins")
+

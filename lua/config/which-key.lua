@@ -1,24 +1,23 @@
 local wk = require("which-key")
 local tools = require("tools")
 
-local c = function(raw)
+local cmd = function(raw)
   return "<cmd>" .. raw .. "<CR>"
 end
 
 local mapping = {
   s = {
     name = "Save or Screen",
-    a = { c("wa"), "Save All Buffer" }
+    a = { cmd("wa"), "Save All Buffer" }
   },
-  e = { c("NvimTreeToggle"), "Toggle NvimTree" },
-  c = { 
+  e = { cmd("NvimTreeToggle"), "Toggle NvimTree" },
+  c = {
     function()
       tools.close_buffer()
     end,
     "Close Buffer"
   },
-  z = {},
-  g = {}
+  h = { cmd("set nohlsearch"), "No Highlight" }
 }
 
 wk.setup {

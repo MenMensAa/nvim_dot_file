@@ -1,7 +1,7 @@
 local treesitter = require('nvim-treesitter.configs')
 
 treesitter.setup {
-  ensure_installed = { 
+  ensure_installed = {
     "c",
     "lua",
     "javascript",
@@ -28,13 +28,15 @@ treesitter.setup {
 }
 
 -- 打开文件时，禁止折叠功能
-vim.api.nvim_create_autocmd(
-  {
-    "BufEnter"
-  }, 
-  {
-    pattern = {"*"},
-    command = "normal zR"
-  }
-)
+if false then
+  vim.api.nvim_create_autocmd(
+    {
+      "BufEnter"
+    },
+    {
+      pattern = {"*"},
+      command = "normal zR"
+    }
+  )
+end
 

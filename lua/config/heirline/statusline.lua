@@ -1,4 +1,6 @@
-local nvimWebDevicons = require("nvim-web-devicons")
+local nvim_web_devicons = require("nvim-web-devicons")
+local conditions = require("heirline.conditions")
+local tools = require("tools")
 
 local mode_color_config = {
   n = "green",
@@ -28,7 +30,7 @@ local Align = { provider = "%=", hl = { bg = align_fill_bg } }
 
 local ViMode = {
   static = {
-    mode_names = { 
+    mode_names = {
       n = "normal",
       no = "normal",
       nov = "normal",
@@ -74,10 +76,7 @@ local ViMode = {
     end,
     update = {
       "ModeChanged",
-      pattern = "*:*",
-      callback = vim.schedule_wrap(function()
-          vim.cmd("redrawstatus")
-      end),
+      callback = vim.schedule_wrap(function() vim.cmd.redrawstatus() end),
     },
   },
   {
@@ -88,12 +87,65 @@ local ViMode = {
   }
 }
 
+local DiagnosticsInfo = {
+  condition = conditions.has_diagnostics,
+  init = function(self)
+    self.diagnostic = tools.get_diagnostics_info()
+  end,
+  update = { "DiagnosticChanged", "BufEnter" },
+  hl = { bg = align_fill_bg },
+  {
+    provider = function(self)
+      return self.diagnostic.errors > 0 and (" " .. self.diagnostic.errors .. " ")
+    end,
+    hl = { fg = "red" }
+  },
+  {
+    provider = function(self)
+      return self.diagnostic.warnings > 0 and (" " .. self.diagnostic.warnings .. " ")
+    end,
+    hl = { fg = "yellow" }
+  },
+  {
+    provider = function(self)
+      return self.diagnostic.hints > 0 and (" " .. self.diagnostic.hints .. " ")
+    end,
+    hl = { fg = "purple" }
+  },
+  {
+    provider = function(self)
+      return self.diagnostic.info > 0 and (" " .. self.diagnostic.info.. " ")
+    end,
+    hl = { fg = "blue" }
+  },
+}
+
+local LSPInfo = {
+  update = {
+    "LspAttach",
+    "LspDetach",
+    "BufEnter",
+    callback = vim.schedule_wrap(function() vim.cmd.redrawstatus() end)
+  },
+  provider = function()
+    local names = {}
+    for _, server in pairs(vim.lsp.get_active_clients({ bufnr = 0 })) do
+      table.insert(names, server.name)
+    end
+    if #names == 0 then
+      return ""
+    end
+    return " [" .. table.concat(names, ",") .. "] "
+  end,
+  hl = { fg = "green", bg = align_fill_bg, bold = true }
+}
+
 local FileInfo = {
   init = function(self)
     local filepath = vim.api.nvim_buf_get_name(0)
     self.filename = vim.fn.fnamemodify(filepath, ":t")
     self.extension = vim.fn.fnamemodify(filepath, ":e")
-    self.icon, self.icon_color = nvimWebDevicons.get_icon_color(self.filename, self.extension, { defualt = true })
+    self.icon, self.icon_color = nvim_web_devicons.get_icon_color(self.filename, self.extension, { defualt = true })
   end,
   { provider = "", hl = { fg = file_info_bg, bg = align_fill_bg } },
   {
@@ -110,7 +162,7 @@ local FileInfo = {
         return { fg = self.icon_color }
       end
     },
-    { 
+    {
       provider = function(self)
         return self.filename .. " "
       end,
@@ -131,7 +183,7 @@ local LineInfo = {
   -- %c = column number
   -- %p = percentage through file of displayed window
   -- %% = print %
-  { 
+  {
     provider = "%7(%l/%L%) %4(%p%%%) ",
     hl = function(self)
       return { bg = get_mode_color(self.mode), fg = "black" }
@@ -139,12 +191,14 @@ local LineInfo = {
   },
 }
 
-return { 
+return {
   init = function(self)
-   self.mode = vim.fn.mode(1)
+    self.mode = vim.fn.mode(1)
   end,
-  ViMode, 
+  ViMode,
   Align,
+  DiagnosticsInfo,
+  LSPInfo,
   FileInfo,
   LineInfo
 }

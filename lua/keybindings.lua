@@ -1,31 +1,4 @@
--- leader key 为空格
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
-
-local generic_opts_any = { noremap = true, silent = true }
-
-local generic_opts = {
-  insert_mode = generic_opts_any,
-  normal_mode = generic_opts_any,
-  visual_mode = generic_opts_any,
-  visual_block_mode = generic_opts_any,
-  command_mode = generic_opts_any,
-  operator_pending_mode = generic_opts_any,
-  term_mode = { silent = true },
-}
-
-local mode_adapters = {
-  insert_mode = "i",
-  normal_mode = "n",
-  term_mode = "t",
-  visual_mode = "v",
-  visual_block_mode = "x",
-  command_mode = "c",
-  operator_pending_mode = "o",
-}
-
--- gg=G
-local defaults = {
+local default_keymaps = {
   insert_mode = {
     -- Move current line / block with Alt-j/k ala vscode.
     ["<A-j>"] = "<Esc>:m .+1<CR>==gi",
@@ -50,17 +23,12 @@ local defaults = {
     ["<C-Right>"] = ":vertical resize +2<CR>",
 
     -- Move current line / block with Alt-j/k a la vscode.
-    -- ["<A-j>"] = ":m .+1<CR>==",
-    -- ["<A-k>"] = ":m .-2<CR>==",
     ["<A-j>"] = "4j",
     ["<A-k>"] = "4k",
 
     -- 快速切换buffer
     ["<A-h>"] = ":bprev<CR>",
     ["<A-l>"] = ":bnext<CR>",
-
-    -- QuickFix
-    ["<C-q>"] = ":call QuickFixToggle()<CR>",
   },
 
   term_mode = {
@@ -75,9 +43,6 @@ local defaults = {
     -- Better indenting
     ["<"] = "<gv",
     [">"] = ">gv",
-
-    -- ["p"] = '"0p',
-    -- ["P"] = '"0P',
   },
 
   visual_block_mode = {
@@ -94,38 +59,72 @@ local defaults = {
   },
 }
 
--- Set key mappings individually
--- @param mode The keymap mode, can be one of the keys of mode_adapters
--- @param key The key of keymap
--- @param val Can be form as a mapping or tuple of mapping and user defined opt
-local function set_keymaps(mode, key, val)
-  local opt = generic_opts[mode] or generic_opts_any
-  if type(val) == "table" then
-    opt = val[2]
-    val = val[1]
-  end
-  if val then
-    vim.keymap.set(mode, key, val, opt)
+-- lsp相关按键绑定
+local lsp_keymaps = {
+  ["K"] = "vim.lsp.buf.hover()",
+  ["gf"] = "vim.lsp.buf.formatting()",
+  ["gr"] = "vim.lsp.buf.references()",
+  ["gd"] = "vim.lsp.buf.definition()",
+  ["gD"] = "vim.lsp.buf.declaration()",
+  ["gi"] = "vim.lsp.buf.implementation()",
+  ["gt"] = "vim.lsp.buf.type_definition()",
+  ["gR"] = "vim.lsp.buf.rename()",
+  ["ga"] = "vim.lsp.buf.code_action()",
+  ["go"] = "vim.diagnostic.open_float()",
+  ["g]"] = "vim.diagnostic.goto_next()",
+  ["g["] = "vim.diagnostic.goto_prev()",
+}
+
+-- leader key 为空格
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
+local M = {}
+
+local generic_opts_any = { noremap = true, silent = true }
+
+local generic_opts = {
+  insert_mode = generic_opts_any,
+  normal_mode = generic_opts_any,
+  visual_mode = generic_opts_any,
+  visual_block_mode = generic_opts_any,
+  command_mode = generic_opts_any,
+  operator_pending_mode = generic_opts_any,
+  term_mode = { silent = true },
+}
+
+local mode_adapters = {
+  insert_mode = "i",
+  normal_mode = "n",
+  term_mode = "t",
+  visual_mode = "v",
+  visual_block_mode = "x",
+  command_mode = "c",
+  operator_pending_mode = "o",
+}
+
+function M.bind_keymaps()
+  for mode, mapping in pairs(default_keymaps) do
+    local format_mode = mode_adapters[mode] or mode
+    for key, val in pairs(mapping) do
+      local opt = generic_opts[format_mode] or generic_opts_any
+      if type(val) == "table" then
+        opt = val[2]
+        val = val[1]
+      end
+      if val then
+        vim.keymap.set(format_mode, key, val, opt)
+      end
+    end
   end
 end
 
--- Load key mappings for a given mode
--- @param mode The keymap mode, can be one of the keys of mode_adapters
--- @param keymaps The list of key mappings
-local function load_mode(mode, keymaps)
-  mode = mode_adapters[mode] or mode
-  for k, v in pairs(keymaps) do
-    set_keymaps(mode, k, v)
+function M.bind_lsp_keymaps(bufnr)
+  for key, action in pairs(lsp_keymaps) do
+    if type(action) == "string" then
+        vim.api.nvim_buf_set_keymap(bufnr, "n", key, "<cmd>lua " .. action .. "<CR>", generic_opts_any)
+    end
   end
 end
 
--- Load key mappings for all provided modes
--- @param keymaps A list of key mappings for each mode
-local function load(keymaps)
-  keymaps = keymaps or {}
-  for mode, mapping in pairs(keymaps) do
-    load_mode(mode, mapping)
-  end
-end
-
-load(defaults)
+return M
