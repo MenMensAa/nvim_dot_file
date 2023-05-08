@@ -122,9 +122,47 @@ end
 function M.bind_lsp_keymaps(bufnr)
   for key, action in pairs(lsp_keymaps) do
     if type(action) == "string" then
-        vim.api.nvim_buf_set_keymap(bufnr, "n", key, "<cmd>lua " .. action .. "<CR>", generic_opts_any)
+      vim.api.nvim_buf_set_keymap(bufnr, "n", key, "<cmd>lua " .. action .. "<CR>", generic_opts_any)
     end
   end
 end
+
+local function has_words_before()
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match "%s" == nil
+end
+
+function M.bind_cmp_keymaps(cmp, luasnip)
+  local SELECT = cmp.SelectBehavior.Select
+  local INSERT = cmp.SelectBehavior.Insert
+  return {
+    ["Up"] = cmp.mapping.select_prev_item { behavior = SELECT },
+    ["Down"] = cmp.mapping.select_next_item { behavior = SELECT },
+    ["<C-k>"] = cmp.mapping.select_prev_item { behavior = INSERT },
+    ["<C-j>"] = cmp.mapping.select_next_item { behavior = INSERT },
+    ["<CR>"] = cmp.mapping.confirm { select = false },
+    ["<Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
+      elseif has_words_before() then
+        cmp.complete()
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
+    ["<S-Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
+}
+end
+
 
 return M

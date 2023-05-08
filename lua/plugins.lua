@@ -73,6 +73,25 @@ local plugins_config = {
     lazy = true,
     dependencies = { "williamboman/mason-lspconfig.nvim", "williamboman/mason.nvim" }
   },
+
+  -- cmp plugins
+  {
+    "L3MON4D3/LuaSnip",
+    dependencies = { "rafamadriz/friendly-snippets" },
+    config = get_config("cmp-luasnip")
+  },
+  {
+    "hrsh7th/nvim-cmp",
+    dependencies = {
+      "saadparwaiz1/cmp_luasnip",
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-path",
+      "hrsh7th/cmp-nvim-lsp",
+      "onsails/lspkind.nvim"
+    },
+    event = "InsertEnter",
+    config = get_config("cmp")
+  },
 }
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
