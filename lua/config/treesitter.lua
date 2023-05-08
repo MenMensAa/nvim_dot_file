@@ -25,6 +25,13 @@ treesitter.setup {
   indent = {
     enable = true
   },
+  context_commentstring = {
+    enable = true,
+    enable_autocmd = false
+  },
+  autotag = {
+    enable = true
+  }
 }
 
 -- 打开文件时，禁止折叠功能

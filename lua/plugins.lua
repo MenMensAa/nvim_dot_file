@@ -40,14 +40,11 @@ local plugins_config = {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     event = { "BufReadPost", "BufNewFile" },
+    dependencies = {
+      "JoosepAlviste/nvim-ts-context-commentstring",
+      "windwp/nvim-ts-autotag"
+    },
     config = get_config("treesitter")
-  },
-
-  {
-    "windwp/nvim-ts-autotag",
-    event = "InsertEnter",
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
-    config = get_config("ts-autotag")
   },
 
   {
@@ -92,6 +89,14 @@ local plugins_config = {
     event = "InsertEnter",
     config = get_config("cmp")
   },
+
+  -- comment plugins
+  {
+    "numToStr/Comment.nvim",
+    event = "User FileOpened",
+    keys = { { "gc", mode = { "n", "v" } }, { "gb", mode = { "n", "v" } } },
+    config = get_config("comment")
+  }
 }
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
