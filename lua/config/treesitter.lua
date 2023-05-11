@@ -9,7 +9,9 @@ treesitter.setup {
     "python",
     "tsx",
     "css",
-    "vue"
+    "vue",
+    "markdown",
+    "markdown_inline"
   },
   highlight = {
     enable = true,

@@ -1,24 +1,5 @@
 local wk = require("which-key")
-local tools = require("tools")
-
-local cmd = function(raw)
-  return "<cmd>" .. raw .. "<CR>"
-end
-
-local mapping = {
-  s = {
-    name = "Save or Screen",
-    a = { cmd("wa"), "Save All Buffer" }
-  },
-  e = { cmd("NvimTreeToggle"), "Toggle NvimTree" },
-  c = {
-    function()
-      tools.close_buffer()
-    end,
-    "Close Buffer"
-  },
-  h = { cmd("set nohlsearch"), "No Highlight" }
-}
+local keybindings = require("keybindings")
 
 wk.setup {
   plugins = {
@@ -41,7 +22,7 @@ wk.setup {
 }
 
 wk.register(
-  mapping,
+  keybindings.bind_which_keymaps(),
   {
     prefix = "<leader>"
   }

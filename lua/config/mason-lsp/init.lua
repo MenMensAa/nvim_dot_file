@@ -22,6 +22,20 @@ require("mason-lspconfig").setup({
 local lspconfig = require("lspconfig")
 local bind_lsp_keymaps = require("keybindings").bind_lsp_keymaps
 
+local diagnostic_sign = require("tools").diagnostic_sign
+
+for type, icon in pairs(diagnostic_sign) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl= hl, numhl = hl })
+end
+
+vim.diagnostic.config({
+  severity_sort = true,
+  virtual_text = {
+    prefix = ""
+  }
+})
+
 for file_name, server_names in pairs(language_server) do
   local status_ok, config = pcall(require, "config.mason-lsp." .. file_name)
   if status_ok then

@@ -70,6 +70,16 @@ local plugins_config = {
     lazy = true,
     dependencies = { "williamboman/mason-lspconfig.nvim", "williamboman/mason.nvim" }
   },
+  {
+    "glepnir/lspsaga.nvim",
+    event = "LspAttach",
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+      --Please make sure you install markdown and markdown_inline parser
+      "nvim-treesitter/nvim-treesitter"
+    },
+    config = get_config("lspsaga")
+  },
 
   -- cmp plugins
   {
@@ -96,6 +106,19 @@ local plugins_config = {
     event = "User FileOpened",
     keys = { { "gc", mode = { "n", "v" } }, { "gb", mode = { "n", "v" } } },
     config = get_config("comment")
+  },
+
+  {
+    "nvim-telescope/telescope.nvim",
+    tag = "0.1.x",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      {
+        "nvim-telescope/telescope-fzf-native.nvim",
+        build = "make"
+      }
+    },
+    config = get_config("telescope")
   }
 }
 

@@ -96,25 +96,25 @@ local DiagnosticsInfo = {
   hl = { bg = align_fill_bg },
   {
     provider = function(self)
-      return self.diagnostic.errors > 0 and (" " .. self.diagnostic.errors .. " ")
+      return self.diagnostic.errors > 0 and (tools.diagnostic_sign.Error .. " " .. self.diagnostic.errors .. " ")
     end,
     hl = { fg = "red" }
   },
   {
     provider = function(self)
-      return self.diagnostic.warnings > 0 and (" " .. self.diagnostic.warnings .. " ")
+      return self.diagnostic.warnings > 0 and (tools.diagnostic_sign.Warn .. " " .. self.diagnostic.warnings .. " ")
     end,
     hl = { fg = "yellow" }
   },
   {
     provider = function(self)
-      return self.diagnostic.hints > 0 and (" " .. self.diagnostic.hints .. " ")
+      return self.diagnostic.hints > 0 and (tools.diagnostic_sign.Hint .. " " .. self.diagnostic.hints .. " ")
     end,
     hl = { fg = "purple" }
   },
   {
     provider = function(self)
-      return self.diagnostic.info > 0 and (" " .. self.diagnostic.info.. " ")
+      return self.diagnostic.info > 0 and (tools.diagnostic_sign.Info .. " " .. self.diagnostic.info.. " ")
     end,
     hl = { fg = "blue" }
   },

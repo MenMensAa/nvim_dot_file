@@ -57,5 +57,12 @@ function tools.get_diagnostics_info()
   return result
 end
 
+tools.diagnostic_sign = {
+  Error = "", --  
+  Warn = "",
+  Hint = "",
+  Info = ""
+}
+
 return tools
 

@@ -1,3 +1,5 @@
+local tools = require("tools")
+
 local default_keymaps = {
   insert_mode = {
     -- Move current line / block with Alt-j/k ala vscode.
@@ -61,18 +63,48 @@ local default_keymaps = {
 
 -- lsp相关按键绑定
 local lsp_keymaps = {
-  ["K"] = "vim.lsp.buf.hover()",
-  ["gf"] = "vim.lsp.buf.formatting()",
-  ["gr"] = "vim.lsp.buf.references()",
-  ["gd"] = "vim.lsp.buf.definition()",
-  ["gD"] = "vim.lsp.buf.declaration()",
-  ["gi"] = "vim.lsp.buf.implementation()",
-  ["gt"] = "vim.lsp.buf.type_definition()",
-  ["gR"] = "vim.lsp.buf.rename()",
-  ["ga"] = "vim.lsp.buf.code_action()",
-  ["go"] = "vim.diagnostic.open_float()",
-  ["g]"] = "vim.diagnostic.goto_next()",
-  ["g["] = "vim.diagnostic.goto_prev()",
+  ["K"] = "Lspsaga hover_doc ++quiet",
+  ["gf"] = "lua vim.lsp.buf.formatting()",
+  ["gr"] = "Telescope lsp_references include_current_line=true ",
+  ["gd"] = "Lspsaga goto_definition",
+  ["gp"] = "Lspsaga peek_definition",
+  ["gt"] = "Lspsaga goto_type_definition",
+  ["gD"] = "lua vim.lsp.buf.declaration()",
+  ["gi"] = "lua vim.lsp.buf.implementation()",
+  ["gR"] = "Lspsaga rename",
+  ["ga"] = "Lspsaga code_action",
+  ["go"] = "Lspsaga show_line_diagnostics ++unfocus",
+  ["g]"] = "lua vim.diagnostic.goto_next()",
+  ["g["] = "lua vim.diagnostic.goto_prev()",
+}
+
+local cmd = function(raw)
+  return "<cmd>" .. raw .. "<CR>"
+end
+
+local which_keymaps = {
+  s = {
+    name = "Save or Screen",
+    a = { cmd("wa"), "Save All Buffer" }
+  },
+  f = {
+    name = "Find",
+    t = { cmd("Telescope live_grep"), "Find Text" },
+    f = { cmd("Telescope find_files"), "Find File" },
+  },
+  e = { cmd("NvimTreeToggle"), "Toggle NvimTree" },
+  c = {
+    function()
+      tools.close_buffer()
+    end,
+    "Close Buffer"
+  },
+  h = { cmd("set nohlsearch"), "No Highlight" },
+  l = {
+    name = "LSP",
+    b = { cmd("Lspsaga show_buf_diagnostics"), "Show Buf Diagnostics" },
+    w = { cmd("Lspsaga show_workspace_diagnostics"), "Show Workspace Diagnostics" }
+  }
 }
 
 -- leader key 为空格
@@ -122,7 +154,7 @@ end
 function M.bind_lsp_keymaps(bufnr)
   for key, action in pairs(lsp_keymaps) do
     if type(action) == "string" then
-      vim.api.nvim_buf_set_keymap(bufnr, "n", key, "<cmd>lua " .. action .. "<CR>", generic_opts_any)
+      vim.api.nvim_buf_set_keymap(bufnr, "n", key, cmd(action), generic_opts_any)
     end
   end
 end
@@ -164,5 +196,8 @@ function M.bind_cmp_keymaps(cmp, luasnip)
 }
 end
 
+function M.bind_which_keymaps()
+  return which_keymaps
+end
 
 return M
