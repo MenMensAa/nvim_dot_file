@@ -94,9 +94,7 @@ local which_keymaps = {
   },
   e = { cmd("NvimTreeToggle"), "Toggle NvimTree" },
   c = {
-    function()
-      tools.close_buffer()
-    end,
+      tools.close_buffer,
     "Close Buffer"
   },
   h = { cmd("set nohlsearch"), "No Highlight" },
@@ -104,6 +102,13 @@ local which_keymaps = {
     name = "LSP",
     b = { cmd("Lspsaga show_buf_diagnostics"), "Show Buf Diagnostics" },
     w = { cmd("Lspsaga show_workspace_diagnostics"), "Show Workspace Diagnostics" }
+  },
+  g = {
+    name = "Git",
+    g = {
+      tools.toggle_lazygit,
+      "Lazygit"
+    }
   }
 }
 

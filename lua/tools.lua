@@ -64,5 +64,22 @@ tools.diagnostic_sign = {
   Info = ""
 }
 
+function tools.toggle_lazygit()
+  -- copy from lunarvim
+  local Terminal = require("toggleterm.terminal").Terminal
+  local lazygit = Terminal:new {
+    cmd = "lazygit",
+    hidden = true,
+    direction = "float",
+    float_opts = {
+      border = "none",
+      width = 100000,
+      height = 100000,
+    },
+    count = 99
+  }
+  lazygit:toggle()
+end
+
 return tools
 

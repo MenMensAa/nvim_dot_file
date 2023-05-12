@@ -119,6 +119,12 @@ local plugins_config = {
       }
     },
     config = get_config("telescope")
+  },
+
+  {
+    "akinsho/toggleterm.nvim",
+    open_mapping = [[<c-\>]],
+    config = get_config("toggleterm")
   }
 }
 
