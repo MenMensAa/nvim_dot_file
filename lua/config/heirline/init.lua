@@ -3,11 +3,10 @@ local tabline = require("config.heirline.tabline")
 local palette = require("palette")
 
 require("heirline").setup({
-  statusline = statusline,
-  tabline = tabline,
+	statusline = statusline,
+	tabline = tabline,
 
-  opts = {
-    colors = palette
-  }
+	opts = {
+		colors = palette,
+	},
 })
-
