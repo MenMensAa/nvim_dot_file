@@ -82,9 +82,53 @@ local ViMode = {
   {
     provider = "",  -- right icon: 
     hl = function(self)
-      return { fg = get_mode_color(self.mode), bg = align_fill_bg }
+      local bg = align_fill_bg
+      if conditions.is_git_repo() then
+        bg = file_info_bg
+      end
+      return { fg = get_mode_color(self.mode), bg = bg }
     end
   }
+}
+
+local Git = {
+  condition = conditions.is_git_repo,
+  init = function(self)
+    self.status_dict = vim.b.gitsigns_status_dict
+  end,
+
+  {
+    provider = function (self)
+      return "  " .. self.status_dict.head .. " "
+    end,
+    hl = { bg = file_info_bg, fg = "fg" }
+  },
+  {
+    provider = "",
+    hl = { fg = file_info_bg, bg = align_fill_bg }
+  },
+
+  {
+    provider = function(self)
+      local count = self.status_dict.added or 0
+      return count > 0 and ("  " .. count)
+    end,
+    hl = { fg = "green", bg = align_fill_bg }
+  },
+  {
+    provider = function(self)
+      local count = self.status_dict.removed or 0
+      return count > 0 and ("  " .. count)
+    end,
+    hl = { fg = "red", bg = align_fill_bg }
+  },
+  {
+    provider = function(self)
+      local count = self.status_dict.changed or 0
+      return count > 0 and ("  " .. count)
+    end,
+    hl = { fg = "yellow", bg = align_fill_bg }
+  },
 }
 
 local DiagnosticsInfo = {
@@ -196,6 +240,7 @@ return {
     self.mode = vim.fn.mode(1)
   end,
   ViMode,
+  Git,
   Align,
   DiagnosticsInfo,
   LSPInfo,

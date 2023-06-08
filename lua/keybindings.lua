@@ -94,7 +94,7 @@ local which_keymaps = {
   },
   e = { cmd("NvimTreeToggle"), "Toggle NvimTree" },
   c = {
-      tools.close_buffer,
+    tools.close_buffer,
     "Close Buffer"
   },
   h = { cmd("set nohlsearch"), "No Highlight" },
@@ -105,10 +105,8 @@ local which_keymaps = {
   },
   g = {
     name = "Git",
-    g = {
-      tools.toggle_lazygit,
-      "Lazygit"
-    }
+    g = { tools.toggle_lazygit, "Lazygit" },
+    t = { cmd("Gitsigns toggle_current_line_blame") , "Toggle Git Blame"},
   }
 }
 
@@ -198,7 +196,7 @@ function M.bind_cmp_keymaps(cmp, luasnip)
         fallback()
       end
     end, { "i", "s" }),
-}
+  }
 end
 
 function M.bind_which_keymaps()

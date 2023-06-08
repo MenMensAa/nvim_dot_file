@@ -24,8 +24,17 @@ local plugins_config = {
   },
 
   {
+    "lewis6991/gitsigns.nvim",
+    event = "BufEnter",
+    config = get_config("gitsigns")
+  },
+
+  {
     "rebelot/heirline.nvim",
     event = "BufEnter",
+    dependencies = {
+      "lewis6991/gitsigns.nvim",
+    },
     config = get_config("heirline")
   },
 
