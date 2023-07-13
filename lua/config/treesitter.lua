@@ -5,6 +5,8 @@ treesitter.setup({
 		"c",
 		"lua",
 		"javascript",
+		"typescript",
+		"scss",
 		"html",
 		"python",
 		"tsx",
